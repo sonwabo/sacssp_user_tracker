@@ -58,7 +58,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Transactional
     public List<AttachmentDTO> getAllAttachmentsForParty(String party) {
         return this.attachmentRepository
-                .findByParty( Long.getLong(party))
+                .findByParty( Long.parseLong(party))
                 .stream().map(AttachmentEntitiy::convertToDto).collect(Collectors.toList());
     }
 

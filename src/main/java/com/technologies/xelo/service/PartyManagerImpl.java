@@ -196,7 +196,11 @@ public class PartyManagerImpl implements PartyManager {
      */
     @Override
     public Long getNextPartySequence(){
-        return this.partyEntityRepository.getNextValMySequence();
+        Long res = this.partyEntityRepository.getNextValMySequence();
+        if(res == 0){
+            return 1L;
+        }
+        return res;
     }
 
 }
