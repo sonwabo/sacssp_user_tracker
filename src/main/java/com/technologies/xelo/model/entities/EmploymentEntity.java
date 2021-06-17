@@ -41,6 +41,11 @@ public class EmploymentEntity implements Serializable, Cloneable {
     @Column(nullable = false, name = "sectorofemployment", columnDefinition="TEXT")
     private String sectorofemployment;
 
+    @Basic
+    @Column(nullable = false, name = "iscommunitypractitioner")
+    private String iscommunitypractitioner;
+
+
     @ToString.Exclude
     @Setter(AccessLevel.PUBLIC)
     @JoinColumn(name = "party_id")

@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static com.technologies.xelo.service.PartyManagerImpl.getUserDetailsDTO;
+
 /**
  * @author <a href="mailto:s.singatha@gmail.com">Sonwabo Singatha</a>
  * @version 1.0
@@ -38,14 +40,7 @@ public class SheetsGenerator {
 
         List<UserDetailsDTO> users = partyEntityRepository.findAll( PageRequest.of(0 , 10))
                 .map(partyEntity -> {
-                    UserDetailsDTO user = DtoToDomainMapper.mapPartyToDto(partyEntity);
-                    DtoToDomainMapper.mapDisclaimerToDto(partyEntity.getDisclaimer(),user);
-                    DtoToDomainMapper.mapIdentificationToDto(partyEntity.getIdentification(),user);
-                    DtoToDomainMapper.mapAddressToDto(partyEntity.getAddresses().get(0),user, Type.PERSONAL);
-                    DtoToDomainMapper.mapContactPointToDto(partyEntity.getContactPoint().get(0),user, Type.PERSONAL);
-                    DtoToDomainMapper.mapEducationToDto(partyEntity.getEducationEntities().get(0), user);
-                    DtoToDomainMapper.mapEmployerToDto(partyEntity.getEmploymentHistory().get(0), user);
-                    return user;
+                    return getUserDetailsDTO(partyEntity);
                 }).toList();
 
         if(!users.isEmpty()){

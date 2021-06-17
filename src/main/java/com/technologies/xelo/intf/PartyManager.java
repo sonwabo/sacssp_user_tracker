@@ -2,7 +2,10 @@ package com.technologies.xelo.intf;
 
 import com.technologies.xelo.dto.PartyDTO;
 import com.technologies.xelo.dto.UserDetailsDTO;
+
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 
 
@@ -28,6 +31,7 @@ public interface PartyManager {
 
     /**
      * Return all the users
+     *
      * @param page
      * @param size
      * @return
@@ -40,7 +44,7 @@ public interface PartyManager {
      * @param user
      * @return
      */
-    String createOrUpdateUser(UserDetailsDTO user);
+    Map<String, String>  createOrUpdateUser(UserDetailsDTO user);
 
     /**
      * Get User Information
@@ -50,7 +54,7 @@ public interface PartyManager {
      */
     UserDetailsDTO getUserDetails(Long userid);
 
-     /**
+    /**
      * Returns User by generated reference
      *
      * @param userid
@@ -60,8 +64,30 @@ public interface PartyManager {
 
     /**
      * Returns the party's next sequence
+     *
      * @return
      */
     Long getNextPartySequence();
 
+    /**
+     * Returns the CitezenshipCount
+     *
+     * @return
+     */
+    Map<String, String> getCitizenshipCount();
+
+
+    /**
+     * Returns the CommunityPractitionerCount
+     *
+     * @return
+     */
+    Map<String, String> getCommunityPractitionerCount();
+
+    /**
+     * Identification Validator
+     *
+     * @return
+     */
+    Map<String, String> validateIdentification(String identificationRef, String identificationType);
 }

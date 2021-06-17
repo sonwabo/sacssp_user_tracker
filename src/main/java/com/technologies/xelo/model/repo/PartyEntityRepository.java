@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.Optional;
+
 @RepositoryRestResource
 public interface PartyEntityRepository extends JpaRepository<PartyEntity, Long> {
-    PartyEntity findByReference(String ref);
+    Optional<PartyEntity> findByReference(String ref);
 
     //@Query(value = "select nextval('data_capture.party_id_seq')", nativeQuery = true)
     @Query(value = "select count(*) from data_capture.party",nativeQuery = true)

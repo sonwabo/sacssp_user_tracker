@@ -3,6 +3,7 @@ package com.technologies.xelo.service;
 import com.technologies.xelo.dto.AttachmentDTO;
 import com.technologies.xelo.intf.DocumentService;
 import com.technologies.xelo.model.entities.AttachmentEntitiy;
+import com.technologies.xelo.model.entities.PartyEntity;
 import com.technologies.xelo.model.repo.AttachmentRepository;
 import com.technologies.xelo.model.repo.PartyEntityRepository;
 import org.apache.commons.logging.Log;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,9 +41,15 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Transactional
     public AttachmentDTO saveAttachment(AttachmentDTO dto) throws IOException {
-       // PartyEntity party = this.partyEntityRepository.findByReference(dto.getReference());
+        logger.info("============= Saving Documents ============= ");
+        logger.info("Reference" + dto.getReference());
+        PartyEntity party = this.partyEntityRepository.findById(Long.parseLong(dto.getReference())).get();
+        logger.info("Found Party " + party.getId());
         AttachmentEntitiy attachment = transform(dto);
-        return this.attachmentRepository.save(attachment).convertToDto();
+        attachment.setParty(party.getId());
+        logger.info(attachment.toString());
+        dto = this.attachmentRepository.save(attachment).convertToDto();
+        return dto;
     }
 
     @Transactional
@@ -65,13 +73,13 @@ public class DocumentServiceImpl implements DocumentService {
     private AttachmentEntitiy transform(AttachmentDTO dto) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(dto.getName()));
         return AttachmentEntitiy.builder()
-                .id(dto.id)
+                .id(dto.getId())
                 .attachmentname(fileName)
                 .createdate(Timestamp.from(new Date().toInstant()))
-                .party(Long.parseLong(dto.getReference()))
+                //.party(Long.parseLong(dto.getReference()))
                 .content(dto.getContent())
                 .size(dto.getSize())
-                .documenttype(dto.documentType)
+                .documenttype(dto.getDocumentType())
                 .contenttype(dto.getContentType())
                 .build();
     }

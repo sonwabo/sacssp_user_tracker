@@ -227,6 +227,7 @@ public class DtoToDomainMapper {
                 .employername(userDetails.employername)
                 .jobtitle(userDetails.jobtitle)
                 .sectorofemployment(userDetails.sectorofemployment)
+                .iscommunitypractitioner(userDetails.iscommunitypractitioner)
                 .build();
 
         AddressEntity addressEntity = mapAddressToDomain(userDetails, Type.EMPLOYMENT);
@@ -242,6 +243,7 @@ public class DtoToDomainMapper {
         userDetails.employername = employment.getEmployername();
         userDetails.jobtitle = employment.getJobtitle();
         userDetails.sectorofemployment = employment.getSectorofemployment();
+        userDetails.iscommunitypractitioner = employment.getIscommunitypractitioner();
         mapAddressToDto(employment.getAddresses().get(0), userDetails, Type.EMPLOYMENT);
         mapContactPointToDto(employment.getContactPoint().get(0),userDetails, Type.EMPLOYMENT );
         return userDetails;

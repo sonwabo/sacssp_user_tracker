@@ -11,7 +11,6 @@ import com.technologies.xelo.util.DtoToDomainMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 import com.technologies.xelo.util.EmailSender;
@@ -65,8 +64,6 @@ public class PartyManagerImpl implements PartyManager {
     }
 
 
-
-
     @Override
     public PartyDTO createParty(PartyDTO party) {
         return partyEntityRepository.save(party.convertToModel()).convertToDto();
@@ -80,20 +77,21 @@ public class PartyManagerImpl implements PartyManager {
 
     @Override
     public UserDetailsDTO getUserDetailsByReference(String reference) {
+        return this.partyEntityRepository
+                .findByReference(reference)
+                .map(PartyManagerImpl::getUserDetailsDTO)
+                .orElse(null);
+    }
 
-        PartyEntity partyEntity = this.partyEntityRepository.findByReference(reference);
-        if (partyEntity != null) {
-
-            UserDetailsDTO user = DtoToDomainMapper.mapPartyToDto(partyEntity);
-            DtoToDomainMapper.mapDisclaimerToDto(partyEntity.getDisclaimer(), user);
-            DtoToDomainMapper.mapIdentificationToDto(partyEntity.getIdentification(), user);
-            DtoToDomainMapper.mapAddressToDto(partyEntity.getAddresses().get(0), user, Type.PERSONAL);
-            DtoToDomainMapper.mapContactPointToDto(partyEntity.getContactPoint().get(0), user, Type.PERSONAL);
-            DtoToDomainMapper.mapEducationToDto(partyEntity.getEducationEntities().get(0), user);
-            DtoToDomainMapper.mapEmployerToDto(partyEntity.getEmploymentHistory().get(0), user);
-            return user;
-        }
-        return null;
+    public static UserDetailsDTO getUserDetailsDTO(PartyEntity partyEntity) {
+        UserDetailsDTO user = DtoToDomainMapper.mapPartyToDto(partyEntity);
+        DtoToDomainMapper.mapDisclaimerToDto(partyEntity.getDisclaimer(), user);
+        DtoToDomainMapper.mapIdentificationToDto(partyEntity.getIdentification(), user);
+        DtoToDomainMapper.mapAddressToDto(partyEntity.getAddresses().get(0), user, Type.PERSONAL);
+        DtoToDomainMapper.mapContactPointToDto(partyEntity.getContactPoint().get(0), user, Type.PERSONAL);
+        DtoToDomainMapper.mapEducationToDto(partyEntity.getEducationEntities().get(0), user);
+        DtoToDomainMapper.mapEmployerToDto(partyEntity.getEmploymentHistory().get(0), user);
+        return user;
     }
 
 
@@ -111,20 +109,13 @@ public class PartyManagerImpl implements PartyManager {
 
         return partyEntityRepository.findAll(PageRequest.of(page, size))
                 .map(partyEntity -> {
-                    UserDetailsDTO user = DtoToDomainMapper.mapPartyToDto(partyEntity);
-                    DtoToDomainMapper.mapDisclaimerToDto(partyEntity.getDisclaimer(), user);
-                    DtoToDomainMapper.mapIdentificationToDto(partyEntity.getIdentification(), user);
-                    DtoToDomainMapper.mapAddressToDto(partyEntity.getAddresses().get(0), user, Type.PERSONAL);
-                    DtoToDomainMapper.mapContactPointToDto(partyEntity.getContactPoint().get(0), user, Type.PERSONAL);
-                    DtoToDomainMapper.mapEducationToDto(partyEntity.getEducationEntities().get(0), user);
-                    DtoToDomainMapper.mapEmployerToDto(partyEntity.getEmploymentHistory().get(0), user);
-                    return user;
+                    return getUserDetailsDTO(partyEntity);
                 });
     }
 
     @Override
     @Transactional
-    public String createOrUpdateUser(UserDetailsDTO user) {
+    public  Map<String, String>  createOrUpdateUser(UserDetailsDTO user) {
 
         PartyEntity partyEntity = DtoToDomainMapper.mapPartyToDomain(user);
         final String reference = UUID.randomUUID().toString();
@@ -163,16 +154,20 @@ public class PartyManagerImpl implements PartyManager {
             emailSender.sendMessageUsingThymeleafTemplate(user.getEmail().trim(),
                     null,
                     "New User Captured",
-                     new HashMap<String,Object>(){{
-                         put("firstname", user.getName1() +" "+ user.getSurname() );
-                         put("reference", reference);
-                     }},
-                     EmailTemplate.USER_CREATED);
+                    new HashMap<String, Object>() {{
+                        put("firstname", user.getName1() + " " + user.getSurname());
+                        put("reference", reference);
+                    }},
+                    EmailTemplate.USER_CREATED);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return reference;
+        Long id = partyEntity.getId();
+        return new HashMap<String, String>(){{
+            put("userid", String.valueOf(id));
+            put("reference", reference);
+        }};
     }
 
     @Override
@@ -181,23 +176,61 @@ public class PartyManagerImpl implements PartyManager {
 
         PartyEntity partyEntity = partyEntityRepository.getOne(userid);
 
-        UserDetailsDTO user = DtoToDomainMapper.mapPartyToDto(partyEntity);
-        DtoToDomainMapper.mapDisclaimerToDto(partyEntity.getDisclaimer(), user);
-        DtoToDomainMapper.mapIdentificationToDto(partyEntity.getIdentification(), user);
-        DtoToDomainMapper.mapAddressToDto(partyEntity.getAddresses().get(0), user, Type.PERSONAL);
-        DtoToDomainMapper.mapContactPointToDto(partyEntity.getContactPoint().get(0), user, Type.PERSONAL);
-        DtoToDomainMapper.mapEducationToDto(partyEntity.getEducationEntities().get(0), user);
-        DtoToDomainMapper.mapEmployerToDto(partyEntity.getEmploymentHistory().get(0), user);
-        return user;
+        return getUserDetailsDTO(partyEntity);
+    }
+
+    @Override
+    public Map<String, String> getCitizenshipCount() {
+        Long southafricansCount = this.identificationEntityRepository.getIsSouthAfricanCitinzenCount("Yes");
+        Long nonsouthafricansCount = this.identificationEntityRepository.getIsSouthAfricanCitinzenCount("No");
+        return new HashMap<String, String>() {{
+            put("southafricans", String.valueOf(southafricansCount));
+            put("nonsouthafricans", String.valueOf(nonsouthafricansCount));
+        }};
+    }
+
+
+    @Override
+    public Map<String, String> getCommunityPractitionerCount() {
+        Long practitioner = this.employmentEntityRepository.getCommunityPractitionerCount("Yes");
+        Long nonpractitioner = this.employmentEntityRepository.getCommunityPractitionerCount("No");
+        return new HashMap<String, String>() {{
+            put("practitioner", String.valueOf(practitioner));
+            put("nonpractitioner", String.valueOf(nonpractitioner));
+        }};
+    }
+
+    @Override
+    public Map<String, String> validateIdentification(String identificationRef, String identificationType) {
+        IdentificationEntity identification = null;
+
+        if (identificationType.equalsIgnoreCase("Passport")) {
+            identification = this.identificationEntityRepository.findByPassport(identificationRef);
+        } else {
+            //Note: This is a hack
+            try {
+                Long.valueOf(identificationRef);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return new HashMap<String, String>() {{
+                    put("response", "text");
+                }};
+            }
+            identification = this.identificationEntityRepository.findByIdentification(identificationRef);
+        }
+        final String response = (identification == null) ? "new" : "exists";
+        return new HashMap<String, String>() {{
+            put("response", response);
+        }};
     }
 
     /**
      * Note: This method is used as a hack to save the docs first
      */
     @Override
-    public Long getNextPartySequence(){
+    public Long getNextPartySequence() {
         Long res = this.partyEntityRepository.getNextValMySequence();
-        if(res == 0){
+        if (res == 0) {
             return 1L;
         }
         return res;

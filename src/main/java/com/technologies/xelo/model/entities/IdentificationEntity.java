@@ -30,16 +30,16 @@ public class IdentificationEntity implements Serializable, Cloneable {
     private String birthdate;
 
     @Basic
-    @Column(name = "identification", columnDefinition="TEXT", unique = true)
+    @Column(name = "identification")
     private String identification;
 
     @Basic
-    @Column(name = "passport", columnDefinition="TEXT")
+    @Column(name = "passport")
     private String passport;
 
 
     @Basic
-    @Column(nullable = false, name = "citizenship", columnDefinition="TEXT")
+    @Column(nullable = false, name = "citizenship")
     private String citizenship;
 
     @Column(nullable = false, name = "type", length = 50)

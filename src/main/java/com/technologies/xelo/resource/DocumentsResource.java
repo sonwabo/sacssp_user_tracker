@@ -51,7 +51,7 @@ public class DocumentsResource {
 
     }
 
-    @PostMapping("/uploadAttachment")
+    @PostMapping("/v1/uploadAttachment")
     public AttachmentDTO uploadFile(@RequestBody AttachmentDTO attachment) {
         try {
             return this.documentService.saveAttachment(attachment);
@@ -60,7 +60,7 @@ public class DocumentsResource {
         return null;
     }
 
-    @PostMapping("/deleteAttachment")
+    @PostMapping("/v1/deleteAttachment")
     public Map<String, String> deleteFile(@RequestBody AttachmentDTO attachment) {
         try {
             final String response = this.documentService.deleteAttachment(attachment);
@@ -72,7 +72,7 @@ public class DocumentsResource {
         return null;
     }
 
-    @GetMapping("/download/file")
+    @GetMapping("/v1/download/file")
     public ResponseEntity<byte[]> getFile(@RequestParam(value = "id") Long id) {
         AttachmentEntitiy fileDB = this.documentService.getAttachment(id);
 
@@ -81,7 +81,7 @@ public class DocumentsResource {
                 .body(fileDB.getContent());
     }
 
-    @GetMapping("/getPartyAttachments")
+    @GetMapping("/v1/getPartyAttachments")
     public Map<String, List<AttachmentDTO>> getAllAttachmentsForParty(@RequestParam(value = "reference") String reference) {
         List<AttachmentDTO> attachments = this.documentService.getAllAttachmentsForParty(reference);
         return new HashMap<String, List<AttachmentDTO>>() {{

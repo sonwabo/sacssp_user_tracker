@@ -42,17 +42,17 @@ public class UserResource {
     }
 
     @GetMapping(value = "/v1/findUserByExternalRef")
-    public ResponseEntity<UserDetailsDTO> findUserByReference(@RequestParam(value = "reference") String reference) {
-        return ResponseEntity.ok(this.partyManager.getUserDetailsByReference(reference));
+    public Map<String, Object> findUserByReference(@RequestParam(value = "reference") String reference) {
+        final  UserDetailsDTO response = this.partyManager.getUserDetailsByReference(reference);
+        return new HashMap<String, Object>() {{
+            put("response", response);
+        }};
     }
 
 
     @PostMapping(value = "/v1/createUser")
     public ResponseEntity<Map<String, String>> createUser(@RequestBody UserDetailsDTO user) {
-        String externalRef = this.partyManager.createOrUpdateUser(user);
-        return ResponseEntity.ok(new HashMap<String, String>() {{
-            put("reference", externalRef);
-        }});
+        return ResponseEntity.ok(this.partyManager.createOrUpdateUser(user));
     }
 
     @GetMapping(value = "/v1/generate-sheets")

@@ -251,7 +251,7 @@ public class PartyManagerTest {
     @Transactional
     @Rollback(false)
     public void findByReference() {
-        PartyEntity partyEntity = partyEntityRepository.findByReference("a627dff6-7952-47d1-99c7-928a43cb7db4");
+        PartyEntity partyEntity = partyEntityRepository.findByReference("a627dff6-7952-47d1-99c7-928a43cb7db4").get();
         System.out.println("<<<<<<<<<<<<< ONE >>>>>>>>>>>>>");
         System.out.println(partyEntity.toString());
     }

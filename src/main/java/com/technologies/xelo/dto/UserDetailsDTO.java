@@ -1,5 +1,6 @@
 package com.technologies.xelo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 /**
  * @author <a href="mailto:s.singatha@gmail.com">Sonwabo Singatha</a>
@@ -13,6 +14,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties
 public class UserDetailsDTO {
 
     /**Personal Information **/
@@ -68,6 +70,7 @@ public class UserDetailsDTO {
     public String jobtitle;
     public String employername;
     public String sectorofemployment;
+    public String iscommunitypractitioner;
 
     /** Employer's Contact**/
     public String empcellphone;
