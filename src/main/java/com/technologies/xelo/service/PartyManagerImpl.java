@@ -9,6 +9,7 @@ import com.technologies.xelo.model.entities.*;
 import com.technologies.xelo.model.repo.*;
 import com.technologies.xelo.util.DtoToDomainMapper;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -118,9 +119,13 @@ public class PartyManagerImpl implements PartyManager {
     public  Map<String, String>  createOrUpdateUser(UserDetailsDTO user) {
 
         PartyEntity partyEntity = DtoToDomainMapper.mapPartyToDomain(user);
-        final String reference = UUID.randomUUID().toString();
-        partyEntity.setReference(reference);
+        partyEntity.setReference(UUID.randomUUID().toString());
         partyEntity = partyEntityRepository.save(partyEntity);
+
+        final String reference = generateReference(partyEntity.getId());
+        partyEntity.setReference( reference );
+        partyEntityRepository.save(partyEntity);
+
 
         DisclaimerEntity disclaimerEntity = DtoToDomainMapper.mapDisclaimerToDomain(user);
         disclaimerEntity.setParty(partyEntity);
@@ -148,6 +153,7 @@ public class PartyManagerImpl implements PartyManager {
         EmploymentEntity employmentEntity = DtoToDomainMapper.mapEmployerToDomain(user);
         employmentEntity.setParty_id(partyEntity);
         employmentEntityRepository.save(employmentEntity);
+
 
 
         try {
@@ -234,6 +240,11 @@ public class PartyManagerImpl implements PartyManager {
             return 1L;
         }
         return res;
+    }
+
+    private String generateReference(long userid){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return "SACSSP-REF-".concat(dateFormat.format(new Date()).concat("-").concat(""+userid));
     }
 
 }
