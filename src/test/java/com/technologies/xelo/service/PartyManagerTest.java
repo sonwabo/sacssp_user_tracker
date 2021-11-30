@@ -12,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -44,6 +46,7 @@ public class PartyManagerTest {
 
 
     @Test
+    @Rollback(true)
     public void testCreateParty(){
 
         PartyDTO partyDTO = PartyDTO.builder()
@@ -65,6 +68,9 @@ public class PartyManagerTest {
         System.out.println("======== Party Created ========= ");
         System.out.println(partyDTO.toString());
     }
+
+
+
 
     @Test
     @Transactional
@@ -255,5 +261,11 @@ public class PartyManagerTest {
         System.out.println("<<<<<<<<<<<<< ONE >>>>>>>>>>>>>");
         System.out.println(partyEntity.toString());
     }
+
+    @Test
+    public void findByReference11() {
+
+    }
+
 
 }

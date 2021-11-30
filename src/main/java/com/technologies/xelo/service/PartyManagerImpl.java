@@ -247,4 +247,26 @@ public class PartyManagerImpl implements PartyManager {
         return "SACSSP-REF-".concat(dateFormat.format(new Date()).concat("-").concat(""+userid));
     }
 
+
+    /**
+     * Note: This method is used to update the user information
+     */
+    @Override
+    public Map<String, String> updateUser( UserDetailsDTO user ) {
+
+        PartyEntity party = Optional.ofNullable( this.partyEntityRepository.getOne(user.userId))
+                .orElse(this.partyEntityRepository.findByReference( user.reference ).get());
+
+        party = DtoToDomainMapper.mapPartyDtoToDomain(party, user);
+        party = DtoToDomainMapper.mapAddressDtoToDomain(party, user );
+        party = DtoToDomainMapper.mapEmploymentHistoryDtoToDomain(party, user );
+        party = DtoToDomainMapper.mapEducationistoryDtoToDomain(party, user );
+
+        Long id = party.getId();
+        final String reference = party.getReference();
+        return new HashMap<String, String>(){{
+            put("userid", String.valueOf(id));
+            put("reference", reference );
+        }};
+    }
 }

@@ -35,6 +35,8 @@ public class DtoToDomainMapper {
     }
 
     public static UserDetailsDTO mapPartyToDto(PartyEntity party) {
+
+        String ethnicalStatus = (party.getEthnicalstatus() != null) ? party.getEthnicalstatus().split(",")[0] : "";
         return UserDetailsDTO.builder()
                 .userId(party.getId())
                 .reference(party.getReference())
@@ -45,7 +47,7 @@ public class DtoToDomainMapper {
                 .surname(party.getSurname())
                 .maidensurname(party.getMaidensurname())
                 .gender(party.getGender().name())
-                .ethnicalstatus(party.getEthnicalstatus())
+                .ethnicalstatus(ethnicalStatus)
                 .disabilitystatus(party.getDisabilitystatus())
                 .maritalstatus(party.getMaritalstatus())
                 .language(party.getLanguage())
@@ -160,7 +162,7 @@ public class DtoToDomainMapper {
             case EDUCATION:
 
                 contactPointEntity.setContactpointtype(Type.EDUCATION);
-                if(StringUtils.hasText(userDetails.institutiontel)){
+                if (StringUtils.hasText(userDetails.institutiontel)) {
                     telephoneEntity = TelephoneEntity.builder()
                             .contact_point_id(contactPointEntity)
                             .tel1(userDetails.institutiontel).build();
@@ -223,7 +225,7 @@ public class DtoToDomainMapper {
     }
 
     public static EmploymentEntity mapEmployerToDomain(UserDetailsDTO userDetails) {
-        EmploymentEntity employer =  EmploymentEntity.builder()
+        EmploymentEntity employer = EmploymentEntity.builder()
                 .employername(userDetails.employername)
                 .jobtitle(userDetails.jobtitle)
                 .sectorofemployment(userDetails.sectorofemployment)
@@ -245,7 +247,7 @@ public class DtoToDomainMapper {
         userDetails.sectorofemployment = employment.getSectorofemployment();
         userDetails.iscommunitypractitioner = employment.getIscommunitypractitioner();
         mapAddressToDto(employment.getAddresses().get(0), userDetails, Type.EMPLOYMENT);
-        mapContactPointToDto(employment.getContactPoint().get(0),userDetails, Type.EMPLOYMENT );
+        mapContactPointToDto(employment.getContactPoint().get(0), userDetails, Type.EMPLOYMENT);
         return userDetails;
     }
 
@@ -259,9 +261,9 @@ public class DtoToDomainMapper {
                 .yearcompleted(userDetails.yearcompleted)
                 .universityobtained(userDetails.universityobtained)
                 .build();
-         ContactPointEntity contactPoint = mapContactPointToDomain(userDetails, Type.EDUCATION);
-         contactPoint.setEducation_id(education);
-         education.setContactPoint(Collections.singletonList(contactPoint));
+        ContactPointEntity contactPoint = mapContactPointToDomain(userDetails, Type.EDUCATION);
+        contactPoint.setEducation_id(education);
+        education.setContactPoint(Collections.singletonList(contactPoint));
         return education;
     }
 
@@ -282,4 +284,78 @@ public class DtoToDomainMapper {
         return userDetails;
     }
 
+    public static PartyEntity mapPartyDtoToDomain(PartyEntity party, UserDetailsDTO user) {
+
+        party.setTitle(user.title);
+        party.setFirstname(user.name1);
+        party.setSecondname(user.name2);
+        party.setThirdname(user.name3);
+        party.setSurname(user.surname);
+        party.setMaidensurname(user.maidensurname);
+        party.setGender(Gender.fromString(user.gender));
+        party.setEthnicalstatus(user.ethnicalstatus);
+        party.setDisabilitystatus(user.disabilitystatus);
+        party.setMaritalstatus(user.maritalstatus);
+        party.setLanguage(user.language);
+
+        ContactPointEntity cp = party.getContactPoint().iterator().next();
+        cp.getEmail().iterator().next().setEmail1(user.email);
+        cp.getTelephone().iterator().next().setTel1(user.worknumber);
+        cp.getTelephone().iterator().next().setCell1(user.cellphone);
+
+
+        return party;
+    }
+
+    public static PartyEntity mapAddressDtoToDomain(PartyEntity party, UserDetailsDTO user) {
+
+        AddressEntity entity = party.getAddresses().iterator().next();
+        entity.setPostalcode(user.postalcode);
+        entity.setProvince(user.provincename);
+        entity.setStreetnumberandname(user.streetnumberandname);
+        entity.setHouseorunitnumberorbusinesspasrkname(user.houseorcomplexnameandnumber);
+        entity.setSuburbname(user.suburbname);
+        entity.setTown(user.townname);
+        return party;
+    }
+
+    public static PartyEntity mapEmploymentHistoryDtoToDomain(PartyEntity party, UserDetailsDTO user) {
+
+        EmploymentEntity employmentHistory = party.getEmploymentHistory().iterator().next();
+        employmentHistory.setEmployername(user.employername);
+        employmentHistory.setJobtitle(user.jobtitle);
+        employmentHistory.setSectorofemployment(user.sectorofemployment);
+        employmentHistory.setIscommunitypractitioner(user.iscommunitypractitioner);
+
+        AddressEntity empAddress = employmentHistory.getAddresses().iterator().next();
+
+        empAddress.setPostalcode(user.emppostalcode);
+        empAddress.setProvince(user.empprovincename);
+        empAddress.setStreetnumberandname(user.empstreetnameandnumber);
+        empAddress.setHouseorunitnumberorbusinesspasrkname(user.empbusinessparknameorunitname);
+        empAddress.setSuburbname(user.empsuburbname);
+        empAddress.setTown(user.emptownname);
+
+        ContactPointEntity emp = employmentHistory.getContactPoint().iterator().next();
+        emp.getEmail().iterator().next().setEmail1(user.empemail);
+        emp.getTelephone().iterator().next().setTel1(user.empworknumber);
+        emp.getTelephone().iterator().next().setCell1(user.empcellphone);
+
+        return party;
+    }
+
+    public static PartyEntity mapEducationistoryDtoToDomain(PartyEntity party, UserDetailsDTO user) {
+
+        EducationEntity education = party.getEducationEntities().iterator().next();
+        education.setDurationofcourse(user.durationofcourse);
+        education.setInstitutionName(user.institutionname);
+        education.setQualificationName(user.qualificationname);
+        education.setYearcompleted(user.yearcompleted);
+        education.setQualificationlevel(user.qualificationlevel);
+        education.setUniversityobtained(user.universityobtained);
+
+        ContactPointEntity cp = education.getContactPoint().iterator().next();
+        cp.getTelephone().iterator().next().setTel1(user.institutiontel);
+        return party;
+    }
 }

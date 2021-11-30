@@ -49,10 +49,18 @@ public class UserResource {
         }};
     }
 
-
     @PostMapping(value = "/v1/createUser")
     public ResponseEntity<Map<String, String>> createUser(@RequestBody UserDetailsDTO user) {
+
+        if(user.userId != null && user.reference != null){
+            return ResponseEntity.ok(this.partyManager.updateUser(user));
+        }
         return ResponseEntity.ok(this.partyManager.createOrUpdateUser(user));
+    }
+
+    @PostMapping(value = "/v1/updateUser")
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody UserDetailsDTO user) {
+        return ResponseEntity.ok(this.partyManager.updateUser(user));
     }
 
     @GetMapping(value = "/v1/generate-sheets")

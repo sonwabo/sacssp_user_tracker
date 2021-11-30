@@ -90,4 +90,12 @@ public interface PartyManager {
      * @return
      */
     Map<String, String> validateIdentification(String identificationRef, String identificationType);
-}
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+     Map<String, String> updateUser( UserDetailsDTO user );
+
+    }
