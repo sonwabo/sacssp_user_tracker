@@ -86,4 +86,14 @@ public class UserDetailsDTO {
     public String empsuburbname;
     public String emptownname;
 
+
+    /** International Students Details **/
+    public String internationalcountry;
+    public String  internationalinstitutionname;
+    public String internationalcompletionyear;
+    public String  internationalinstitutionemail;
+    public String  internationalqualificationname;
+    public String  internationalsaqavalidation;
+    public String  internationalsaqaverification;
+
 }

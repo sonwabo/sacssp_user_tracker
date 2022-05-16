@@ -6,6 +6,9 @@ import com.technologies.xelo.model.entities.*;
 import java.util.Collections;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+
 
 /**
  * @author <a href="mailto:s.singatha@gmail.com">Sonwabo Singatha</a>
@@ -30,6 +33,14 @@ public class DtoToDomainMapper {
                 .disabilitystatus(userDetails.disabilitystatus)
                 .maritalstatus(userDetails.maritalstatus)
                 .language(userDetails.language)
+
+                .internationalcountry(userDetails.internationalcountry)
+                .internationalinstitutionname(userDetails.internationalinstitutionname)
+                .internationalcompletionyear(userDetails.internationalcompletionyear)
+                .internationalinstitutionemail(userDetails.internationalinstitutionemail)
+                .internationalqualificationname(userDetails.internationalqualificationname)
+                .internationalsaqavalidation(userDetails.internationalsaqavalidation)
+                .internationalsaqaverification(userDetails.internationalsaqaverification)
                 .partyType(PartyType.PERSON)
                 .build();
     }
@@ -51,6 +62,15 @@ public class DtoToDomainMapper {
                 .disabilitystatus(party.getDisabilitystatus())
                 .maritalstatus(party.getMaritalstatus())
                 .language(party.getLanguage())
+
+                .internationalcountry(party.getInternationalcountry())
+                .internationalinstitutionname(party.getInternationalinstitutionname())
+                .internationalcompletionyear(party.getInternationalcompletionyear())
+                .internationalinstitutionemail(party.getInternationalinstitutionemail())
+                .internationalqualificationname(party.getInternationalqualificationname())
+                .internationalsaqavalidation(party.getInternationalsaqavalidation())
+                .internationalsaqaverification(party.getInternationalsaqaverification())
+
                 .build();
     }
 
@@ -297,6 +317,14 @@ public class DtoToDomainMapper {
         party.setDisabilitystatus(user.disabilitystatus);
         party.setMaritalstatus(user.maritalstatus);
         party.setLanguage(user.language);
+
+        party.setInternationalcountry(user.internationalcountry);
+        party.setInternationalinstitutionname(user.internationalinstitutionname);
+        party.setInternationalcompletionyear(user.internationalcompletionyear);
+        party.setInternationalinstitutionemail(user.internationalinstitutionemail);
+        party.setInternationalqualificationname(user.internationalqualificationname);
+        party.setInternationalsaqavalidation(user.internationalsaqavalidation);
+        party.setInternationalsaqaverification(user.internationalsaqaverification);
 
         ContactPointEntity cp = party.getContactPoint().iterator().next();
         cp.getEmail().iterator().next().setEmail1(user.email);
