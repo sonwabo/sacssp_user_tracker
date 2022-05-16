@@ -84,6 +84,9 @@ public class PartyEntity implements Serializable, Cloneable {
     @Basic
     private String reference;
 
+    @Column(nullable = false, name = "nameofhighestcommdevqualification", length = 100, unique = true, columnDefinition="TEXT")
+    @Basic
+    public String nameofhighestcommdevqualification;
 
     @Column(nullable = false, name = "internationalcountry", length = 100, unique = true, columnDefinition="TEXT")
     @Basic

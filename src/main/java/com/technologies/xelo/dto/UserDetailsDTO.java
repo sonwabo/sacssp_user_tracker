@@ -88,6 +88,7 @@ public class UserDetailsDTO {
 
 
     /** International Students Details **/
+    public String nameofhighestcommdevqualification;
     public String internationalcountry;
     public String  internationalinstitutionname;
     public String internationalcompletionyear;

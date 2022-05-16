@@ -34,6 +34,7 @@ public class DtoToDomainMapper {
                 .maritalstatus(userDetails.maritalstatus)
                 .language(userDetails.language)
 
+                .nameofhighestcommdevqualification(userDetails.nameofhighestcommdevqualification)
                 .internationalcountry(userDetails.internationalcountry)
                 .internationalinstitutionname(userDetails.internationalinstitutionname)
                 .internationalcompletionyear(userDetails.internationalcompletionyear)
@@ -63,6 +64,7 @@ public class DtoToDomainMapper {
                 .maritalstatus(party.getMaritalstatus())
                 .language(party.getLanguage())
 
+                .nameofhighestcommdevqualification(party.getNameofhighestcommdevqualification())
                 .internationalcountry(party.getInternationalcountry())
                 .internationalinstitutionname(party.getInternationalinstitutionname())
                 .internationalcompletionyear(party.getInternationalcompletionyear())
@@ -318,6 +320,7 @@ public class DtoToDomainMapper {
         party.setMaritalstatus(user.maritalstatus);
         party.setLanguage(user.language);
 
+        party.setNameofhighestcommdevqualification( user.nameofhighestcommdevqualification);
         party.setInternationalcountry(user.internationalcountry);
         party.setInternationalinstitutionname(user.internationalinstitutionname);
         party.setInternationalcompletionyear(user.internationalcompletionyear);
