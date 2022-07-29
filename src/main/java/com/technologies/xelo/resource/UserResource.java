@@ -4,14 +4,21 @@ import com.technologies.xelo.dto.UserDetailsDTO;
 import com.technologies.xelo.intf.PartyManager;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.technologies.xelo.security.model.Role;
+import com.technologies.xelo.security.model.User;
+import com.technologies.xelo.security.service.UserService;
 import com.technologies.xelo.util.SheetsGenerator;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * @author <a href="mailto:s.singatha@gmail.com">Sonwabo Singatha</a>
@@ -21,14 +28,35 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 public class UserResource {
 
     private final PartyManager partyManager;
     private final SheetsGenerator sheetsGenerator;
+    private final UserService userService;
 
-    public UserResource(PartyManager partyManager, SheetsGenerator sheetsGenerator) {
-        this.partyManager = partyManager;
-        this.sheetsGenerator = sheetsGenerator;
+    @GetMapping(value = "/v1/users")
+    public ResponseEntity<List<User>> getUsers(){
+        return   ResponseEntity.created(null).body(this.userService.getUsers());
+    }
+
+    @PostMapping(value = "/v1/user/save")
+    public ResponseEntity<User> saveUser(@RequestBody User user){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
+        return   ResponseEntity.created(uri).body(this.userService.saveUser(user));
+    }
+
+    @PostMapping(value = "/v1/role/save")
+    public ResponseEntity<Role> saveRole(@RequestBody Role role){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
+        return   ResponseEntity.created(uri).body(this.userService.saveRole(role));
+    }
+
+    @PostMapping(value = "/v1/role/addtouser")
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
+        this.userService.addRoleToUser(form.getUsername(), form.getRoleName());
+        return   ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/v1/listAllUsers")
@@ -81,3 +109,10 @@ public class UserResource {
         }});
     }
 }
+
+@Data
+class RoleToUserForm {
+    private String username;
+    private String roleName;
+}
+

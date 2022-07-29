@@ -6,7 +6,10 @@ import com.technologies.xelo.model.entities.AttachmentEntitiy;
 import com.technologies.xelo.model.entities.PartyEntity;
 import com.technologies.xelo.model.repo.AttachmentRepository;
 import com.technologies.xelo.model.repo.PartyEntityRepository;
+import com.technologies.xelo.service.PartyManagerImpl;
 import com.technologies.xelo.util.SheetsGenerator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -38,6 +41,9 @@ import java.util.*;
  */
 @RestController
 public class DocumentsResource {
+
+    private static Log logger = LogFactory.getLog(DocumentsResource.class);
+
 
     private final DocumentService documentService;
     private final SheetsGenerator sheetsGenerator;
@@ -97,6 +103,10 @@ public class DocumentsResource {
                                                         @PathVariable("page") Integer page,
                                                         @PathVariable("size") Integer size,
                                                         @PathVariable("fileName") String fileName) throws IOException {
+
+        logger.info("********************** File Name Generated ******************** ");
+        logger.info( fileName );
+        fileName = "UserData.xls";
         if (this.sheetsGenerator.generateSheets(page, size)) {
             Path file = Paths.get(this.fileNameAndLocation);
             Resource resource = new UrlResource(file.toUri());

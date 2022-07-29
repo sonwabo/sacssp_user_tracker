@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-
-<body>
-<p th:text="'Dear ' + ${firstname}"></p>
-<p>Your user data has been captured successfully</p>
-<p th:text="'Below is your generated Reference for furthure communication : ' + ${reference}"></p>
-<br/>
-<br>
-<p>Regards,</p>
-<p>
-    <em>Xelo Technologies</em> <br />
-</p>
-</body>
-</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    </head>
+    <body>
+        <div style="display:inline;">Dear</div>
+            <strong>
+                <div style="display:inline;" th:text="${firstname}"></div>
+            </strong>
+        <br/>
+        <p>Your user data has been captured successfully</p>
+        <p th:text="'Your unique personal reference number is: ' + ${reference}"></p>
+        <p>Please keep your unique personal reference safe.</p>
+        <p>Your unique personal reference number should be used during all enquiries and updates.</p>
+        <br/>
+        <br/>
+        <p>Warm Regards,</p>
+        <p>
+            <em>South African Council for Social Service Professions </em> <br/>
+        </p>
+    </body>
 </html>

@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @Service
 public class LoginManagerImpl implements LoginManager {
-
     @Override
     public String login(LoginDTO login) {
         return UUID.randomUUID().toString();

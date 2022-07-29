@@ -122,9 +122,10 @@ public class PartyManagerImpl implements PartyManager {
         partyEntity.setReference(UUID.randomUUID().toString());
         partyEntity = partyEntityRepository.save(partyEntity);
 
+
         final String reference = generateReference(partyEntity.getId());
         partyEntity.setReference( reference );
-        partyEntityRepository.save(partyEntity);
+        partyEntity = partyEntityRepository.save(partyEntity);
 
 
         DisclaimerEntity disclaimerEntity = DtoToDomainMapper.mapDisclaimerToDomain(user);
@@ -154,14 +155,12 @@ public class PartyManagerImpl implements PartyManager {
         employmentEntity.setParty_id(partyEntity);
         employmentEntityRepository.save(employmentEntity);
 
-
-
         try {
             emailSender.sendMessageUsingThymeleafTemplate(user.getEmail().trim(),
                     null,
                     "New User Captured",
                     new HashMap<String, Object>() {{
-                        put("firstname", user.getName1() + " " + user.getSurname());
+                        put("firstname", " " + user.getName1() + " " + user.getSurname());
                         put("reference", reference);
                     }},
                     EmailTemplate.USER_CREATED);

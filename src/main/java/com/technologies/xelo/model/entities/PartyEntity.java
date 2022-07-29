@@ -84,34 +84,34 @@ public class PartyEntity implements Serializable, Cloneable {
     @Basic
     private String reference;
 
-    @Column(nullable = false, name = "nameofhighestcommdevqualification", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "nameofhighestcommdevqualification", length = 100, columnDefinition="TEXT")
     @Basic
     public String nameofhighestcommdevqualification;
 
-    @Column(nullable = false, name = "internationalcountry", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalcountry", length = 100, columnDefinition="TEXT")
     @Basic
     public String internationalcountry;
 
-    @Column(nullable = false, name = "internationalinstitutionname", length = 100,columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalinstitutionname", length = 100,columnDefinition="TEXT")
     @Basic
     public String  internationalinstitutionname;
 
-    @Column(nullable = false, name = "internationalcompletionyear", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalcompletionyear", length = 100, columnDefinition="TEXT")
     @Basic
     public String internationalcompletionyear;
 
-    @Column(nullable = false, name = "internationalinstitutionemail", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalinstitutionemail", length = 100, columnDefinition="TEXT")
     @Basic
     public String  internationalinstitutionemail;
 
-    @Column(nullable = false, name = "internationalqualificationname", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalqualificationname", length = 100, columnDefinition="TEXT")
     @Basic
     public String  internationalqualificationname;
 
-    @Column(nullable = false, name = "internationalsaqavalidation", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalsaqavalidation", length = 100, columnDefinition="TEXT")
     @Basic
     public String  internationalsaqavalidation;
-    @Column(nullable = false, name = "internationalsaqaverification", length = 100, columnDefinition="TEXT")
+    @Column(nullable = true, name = "internationalsaqaverification", length = 100, columnDefinition="TEXT")
     @Basic
     public String  internationalsaqaverification;
 
